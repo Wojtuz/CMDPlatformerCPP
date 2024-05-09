@@ -1,0 +1,7 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/CMDPlatformerCPP/.vs/CMDPlatformerCPP
+/CMDPlatformerCPP/CMDPlatformerCPP/x64/Debug/CMDPlatformerCPP.tlog
