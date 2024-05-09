@@ -1,38 +1,11 @@
 ﻿#include <iostream>
+#include "header.h" //we can use this to store functions regarding different parts of the program, like the menu, the game, etc. so that we can split the code into multiple files and see (github) what changed in each file
 using namespace std;
 
 int exitGame = 0;
+string null;
 
-int menu(bool firstTime)
-{
-	
-	cout << "****Game!****" << endl;
-	cout << "1. Play Game" << endl; //Not working
-	cout << "2. Scoreboard" << endl; //Not working
-	cout << "3. Exit" << endl;
-	cout << "Please enter the number of the option you would like to select: ";
-	int choice;
-	cin >> choice;
-
-	return choice;
-}
-void choice(int choice)
-{
-	switch (choice)
-	{
-	case 1:
-		cout << "Play Game" << endl;
-		break;
-	case 2:
-		cout << "Scoreboard" << endl;
-		break;
-	case 3:
-		exitGame = 1;
-		break;
-	default:
-		break;
-	}
-}
+void playGame();
 
 int main()
 {
@@ -45,3 +18,24 @@ int main()
 	}
 	return 0;
 }
+
+void choice(int choice)
+{
+	switch (choice)
+	{
+	case 1:
+		playGame();
+		break;
+	case 2:
+		cout << "Scoreboard" << endl;
+		break;
+	case 3:
+		exitGame = 1;
+		break;
+	default:
+		break;
+	}
+	cin >> null;
+	cout << "\033[2J\033[1;1H";
+}
+
