@@ -5,3 +5,6 @@
 /.vs
 /CMDPlatformerCPP/.vs/CMDPlatformerCPP
 /CMDPlatformerCPP/CMDPlatformerCPP/x64/Debug/CMDPlatformerCPP.tlog
+/CMDPlatformerCPP/CMDPlatformerCPP/x64/Debug
+/CMDPlatformerCPP/x64/Debug/CMDPlatformerCPP.exe
+/CMDPlatformerCPP/x64/Debug/CMDPlatformerCPP.pdb
