@@ -11,7 +11,6 @@ char map[y][x];
 int position[2] = { y-2, 1 };
 
 
-
 void playerInput(bool canJump)
 {
 	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1)
@@ -25,7 +24,7 @@ void playerInput(bool canJump)
 	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
 	{
 		position[0]-=2;
-		Sleep(10);
+		Sleep(20);
 		position[0]-=2;
 	}
 	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2)
@@ -38,13 +37,7 @@ void drawMap()
 {
 	fstream file;
 	file.open("map.txt", ios::in);
-	/*for (int i = 0; i < 14; i++)
-	{
-		for (int j = 0; j < 40; j++)
-		{
-			map[i][j] = '.';
-		}
-	}*/
+
 	file.close();
 	for (int i = 0; i < y; i++)
 	{
