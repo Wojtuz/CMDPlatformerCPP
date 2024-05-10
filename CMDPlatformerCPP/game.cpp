@@ -4,25 +4,31 @@
 #include <fstream>
 using namespace std;
 
-char map[60][20];
-int position[2] = { 0, 0 };
+const int x = 40;
+const int y = 14;
+
+char map[y][x];
+int position[2] = { y-2, 1 };
 
 
-void updatePosition()
+
+void playerInput(bool canJump)
 {
-	if (GetAsyncKeyState(VK_LEFT) && position[1] > 0)
+	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1)
 	{
 		position[1]--;
 	}
-	if (GetAsyncKeyState(VK_RIGHT) && position[1] < 19)
+	if (GetAsyncKeyState(VK_RIGHT) && position[1] < x-2)
 	{
 		position[1]++;
 	}
-	if (GetAsyncKeyState(VK_UP) && position[0] > 0)
+	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
 	{
-		position[0]--;
+		position[0]-=2;
+		Sleep(10);
+		position[0]-=2;
 	}
-	if (GetAsyncKeyState(VK_DOWN) && position[0] < 19)
+	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2)
 	{
 		position[0]++;
 	}
@@ -32,21 +38,26 @@ void drawMap()
 {
 	fstream file;
 	file.open("map.txt", ios::in);
-	for (int i = 0; i < 60; i++)
+	/*for (int i = 0; i < 14; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < 40; j++)
 		{
-			map[i][j] = ' ';
+			map[i][j] = '.';
 		}
-	}
+	}*/
 	file.close();
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < y; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < x; j++)
 		{
 			if (i == position[0] && j == position[1])
 			{
 				cout << "O";
+			}
+			else if (i == 0 || i == y-1 || j == 0 || j == x-1)
+			{
+				//border/screenbezel
+				cout << "#";
 			}
 			else
 			{
@@ -68,10 +79,10 @@ void playGame()
 	bool isMovingRight = false;
 	bool isDead = false;
 
-
-	for (int i = 0; i < 60; i++)
+	//Make empty map
+	for (int i = 0; i < y; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < x; j++)
 		{
 			map[i][j] = ' ';
 		}
@@ -80,8 +91,20 @@ void playGame()
 	while (life > 0)
 	{
 		cout << "Lives: " << life << "                      Score: " << score << endl;
+		
+		playerInput(isOnGround);
 		drawMap();
-		updatePosition();
+
+		//gravity applied when air is beneath player
+		if (*map[(position[0]-1)] == ' ' && position[0] < y-2)
+		{
+			position[0]++;
+			isOnGround = false;
+		}
+		else
+		{
+			isOnGround = true;
+		}
 		Sleep(15); //This is the delay between each frame (miliseconds)
 		system("cls"); //This is the command to clear the console
 	}
