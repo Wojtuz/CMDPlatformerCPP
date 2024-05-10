@@ -6,6 +6,7 @@ int exitGame = 0;
 string null;
 
 void playGame();
+void choice(int choice);
 
 int main()
 {
