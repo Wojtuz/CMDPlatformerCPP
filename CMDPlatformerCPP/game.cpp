@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <fstream>
+#include <wtypes.h>
 using namespace std;
 
 const int x = 40;
@@ -10,7 +11,21 @@ const int y = 14;
 char map[y][x];
 int position[2] = { y-2, 1 };
 
-
+void ClearScreen()
+{
+	COORD cursorPosition;	
+	cursorPosition.X = 0;	
+	cursorPosition.Y = 0;	
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
+}
+void GetDesktopResolution(int& horizontal, int& vertical)
+{
+	RECT desktop;
+	const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktop);
+    horizontal = desktop.right;
+	vertical = desktop.bottom;
+}
 void playerInput(bool canJump)
 {
 	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1)
@@ -73,6 +88,7 @@ void playGame()
 	bool isDead = false;
 
 	//Make empty map
+	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
@@ -99,6 +115,6 @@ void playGame()
 			isOnGround = true;
 		}
 		Sleep(15); //This is the delay between each frame (miliseconds)
-		system("cls"); //This is the command to clear the console
+		ClearScreen(); //This is the command to clear the console
 	}
 }

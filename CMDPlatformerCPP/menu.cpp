@@ -1,5 +1,6 @@
 #include "header.h"
 #include <iostream>
+#include <Windows.h>
 using namespace std;
 
 int menu(bool firstTime)
@@ -14,6 +15,6 @@ int menu(bool firstTime)
 	cout << "Please enter the number of the option you would like to select: ";
 	int choice;
 	cin >> choice;
-
+	system("cls");
 	return choice;
 }
