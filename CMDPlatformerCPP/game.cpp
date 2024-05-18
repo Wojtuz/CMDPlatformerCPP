@@ -2,14 +2,18 @@
 #include <Windows.h>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <wtypes.h>
 using namespace std;
 
-const int x = 40;
-const int y = 14;
+const int x = 120;
+const int y = 27;
 
 char map[y][x];
-int position[2] = { y-2, 1 };
+int position[2] = { y-3, 1 };
+
+string temp;
+int number;
 
 void ClearScreen()
 {
@@ -39,7 +43,7 @@ void playerInput(bool canJump)
 	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
 	{
 		position[0]-=2;
-		Sleep(20);
+		Sleep(10);
 		position[0]-=2;
 	}
 	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2)
@@ -47,13 +51,32 @@ void playerInput(bool canJump)
 		position[0]++;
 	}
 }
-
-void drawMap()
+void makeMap()
 {
 	fstream file;
-	file.open("map.txt", ios::in);
+	if (!file)
+	{
+		cout << "Map has not been found." << endl;
+	}
+	else
+	{
+		file.open("Map1.txt", ios::in);
+		for (int i = 0; i < 27; i++)
+		{
+			getline(file, temp, '\n');
 
-	file.close();
+			for (int j = 0; j < 120; j++)
+			{
+				map[i][j] = temp[j];
+			}
+		}
+		file.close();
+	}
+
+}
+void drawMap()
+{
+	
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
@@ -82,30 +105,26 @@ void playGame()
 	int score = 0;
 	bool isOnGround = true;
 	bool isJumping = false;
-	bool isDucking = false;
 	bool isMovingLeft = false;
 	bool isMovingRight = false;
 	bool isDead = false;
 
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-	for (int i = 0; i < y; i++)
-	{
-		for (int j = 0; j < x; j++)
-		{
-			map[i][j] = ' ';
-		}
-	}
+	
 
 	while (life > 0)
 	{
 		cout << "Lives: " << life << "                      Score: " << score << endl;
 		
 		playerInput(isOnGround);
+		makeMap();
 		drawMap();
 
+		number = position[0];
+		char x = map[position[0]][position[1]];
 		//gravity applied when air is beneath player
-		if (*map[(position[0]-1)] == ' ' && position[0] < y-2)
+		if (map[position[0]+1][position[1]] == ' ')
 		{
 			position[0]++;
 			isOnGround = false;
@@ -114,7 +133,7 @@ void playGame()
 		{
 			isOnGround = true;
 		}
-		Sleep(15); //This is the delay between each frame (miliseconds)
+		Sleep(3); //This is the delay between each frame (miliseconds)
 		ClearScreen(); //This is the command to clear the console
 	}
 }
