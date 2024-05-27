@@ -7,8 +7,8 @@ int menu(bool firstTime)
 {
 
 	cout << "****Game!****" << endl;
-	cout << "1. Play Game" << endl; //Not working
-	cout << "2. Scoreboard" << endl; //Not working
+	cout << "1. Play Game" << endl; // Actually it works
+	cout << "2. Scoreboard" << endl; //Actually it works
 	//we can add binds to rebind movement keys
 	//we can add a instructions page
 	cout << "3. Exit" << endl;

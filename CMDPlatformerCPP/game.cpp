@@ -45,6 +45,13 @@ void coinCheck()
 		score++;
 	}
 }
+void lifeCheck() {
+	if (map[position[0]][position[1]] == 'X')
+	{
+		life--;
+		position[1]-=3;
+	}
+}
 
 void exPosUpdate()
 {
@@ -211,6 +218,8 @@ void drawMap()
 
 void playGame()
 {
+	score = 0;
+	life = 3;
 	bool isOnGround = true;
 	bool isJumping = false;
 	bool isMovingLeft = false;
@@ -228,6 +237,7 @@ void playGame()
 		
 		playerInput(isOnGround);
 		coinCheck();
+		lifeCheck();
 		drawMap();
 
 
@@ -239,4 +249,11 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
+	system("cls");
+	fstream scores;
+	scores.open("scoreboard.txt", ios::out);
+
+	cout << "Lifes ended. GAME OVER!" << endl;
+	cout << "Press any key to continue" << endl;
+
 }
