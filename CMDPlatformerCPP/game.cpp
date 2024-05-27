@@ -32,21 +32,25 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 }
 void playerInput(bool canJump)
 {
-	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1)
+	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1 && map[position[0]][position[1] - 1] != '[')
 	{
 		position[1]--;
 	}
-	if (GetAsyncKeyState(VK_RIGHT) && position[1] < x-2)
+	if (GetAsyncKeyState(VK_RIGHT) && position[1] < x-2 && map[position[0]][position[1]+1] != '[')
 	{
 		position[1]++;
 	}
 	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
 	{
 		position[0]-=2;
-		Sleep(10);
-		position[0]-=2;
+		Sleep(3);
+		if (map[position[0] - 2][position[1]] != '[')
+		{
+			position[0] -= 2;
+
+		}
 	}
-	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2)
+	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2 && map[position[0]+1][position[1]] != '[')
 	{
 		position[0]++;
 	}
@@ -122,7 +126,7 @@ void playGame()
 		drawMap();
 
 		number = position[0];
-		char x = map[position[0]][position[1]];
+		//char x = map[position[0]][position[1]];
 		//gravity applied when air is beneath player
 		if (map[position[0]+1][position[1]] == ' ')
 		{
@@ -133,7 +137,8 @@ void playGame()
 		{
 			isOnGround = true;
 		}
-		Sleep(3); //This is the delay between each frame (miliseconds)
+		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
+		//system("cls"); //
 	}
 }
