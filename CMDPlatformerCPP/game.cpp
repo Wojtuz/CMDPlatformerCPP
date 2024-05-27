@@ -11,9 +11,8 @@ const int y = 27;
 
 char map[y][x];
 int position[2] = { y-3, 1 };
-
+int exPosition[2] = { y-3, 1 };
 string temp;
-int number;
 
 void ClearScreen()
 {
@@ -31,6 +30,11 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	vertical = desktop.bottom;
 }
 
+void exPosUpdate()
+{
+	exPosition[0] = position[0];
+	exPosition[1] = position[1];
+}
 
 int howHigh()
 {
@@ -49,7 +53,7 @@ int howHigh()
 	return above;
 }
 
-void leftRight()
+void leftRightDown()
 {
 	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1 && map[position[0]][position[1] - 1] != '[')
 	{
@@ -59,45 +63,81 @@ void leftRight()
 	{
 		position[1]++;
 	}
+	if (GetAsyncKeyState(VK_DOWN) && position[0] < y - 2 && map[position[0] + 1][position[1]] != '[')
+	{
+		position[0]++;
+	}
 }
 
-void playerInput(bool canJump)
-{	
-	leftRight();
+void oneBlockUp()
+{
+	exPosUpdate();
+	position[0]--;
+}
+
+void jump(bool canJump)
+{
 	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
 	{
 		switch (howHigh())	//how high can a player jump
 		{
-			case 0:
-				break;
-			case 1:
-				position[0]--;
-				break;
-			case 2:
-				position[0]-=2;
-				break;
+		case 0:
+			break;
+		case 1:
+			oneBlockUp();
+			break;
+		case 2:
+			oneBlockUp();
+			oneBlockUp();
+			break;
 
-			case 3:
-				position[0] -= 2;
-				Sleep(3);
-				leftRight();
-				position[0]--;
-				break;
-			default:
-				position[0] -= 2;
-				Sleep(3);
-				leftRight();
-				position[0] -= 2;
-				break;
+		case 3:
+			oneBlockUp();
+			oneBlockUp();
+			Sleep(3);
+			leftRightDown();
+			oneBlockUp();
+			break;
+		default:
+			oneBlockUp();
+			oneBlockUp();
+			Sleep(3);
+			leftRightDown();
+			oneBlockUp();
+			oneBlockUp();
+			break;
 		}
-
-
-
 	}
-	if (GetAsyncKeyState(VK_DOWN) && position[0] < y-2 && map[position[0]+1][position[1]] != '[')
+}
+
+bool applyGravity()
+{
+	bool isOnGround;
+	if (map[position[0] + 1][position[1]] == '[' || map[position[0] + 1][position[1]] == '~')
+	{
+		isOnGround = true;
+	}
+	else
 	{
 		position[0]++;
+		isOnGround = false;
 	}
+	return isOnGround;
+}
+
+void errorHandler()
+{
+	if (map[position[0]][position[1]] == '[')
+	{
+		position[0]--;
+	}
+}
+
+void playerInput(bool canJump)
+{	
+	leftRightDown();
+	jump(canJump);
+	errorHandler();
 }
 void makeMap()
 {
@@ -169,18 +209,10 @@ void playGame()
 		makeMap();
 		drawMap();
 
-		number = position[0];
 		//char x = map[position[0]][position[1]];
 		//gravity applied when air is beneath player
-		if (map[position[0]+1][position[1]] == ' ')
-		{
-			position[0]++;
-			isOnGround = false;
-		}
-		else
-		{
-			isOnGround = true;
-		}
+		isOnGround = applyGravity();
+		
 		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
