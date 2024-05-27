@@ -6,13 +6,20 @@
 #include <wtypes.h>
 using namespace std;
 
+int life = 3;
+int score = 0;
+
 const int x = 120;
 const int y = 27;
 
 char map[y][x];
 int position[2] = { y-3, 1 };
 int exPosition[2] = { y-3, 1 };
+
 string temp;
+
+
+
 
 void ClearScreen()
 {
@@ -28,6 +35,15 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	GetWindowRect(hDesktop, &desktop);
     horizontal = desktop.right;
 	vertical = desktop.bottom;
+}
+
+void coinCheck()
+{
+	if (map[position[0]][position[1]] == '$')
+	{
+		map[position[0]][position[1]] = ' ';
+		score++;
+	}
 }
 
 void exPosUpdate()
@@ -73,6 +89,7 @@ void oneBlockUp()
 {
 	exPosUpdate();
 	position[0]--;
+	coinCheck();
 }
 
 void jump(bool canJump)
@@ -139,6 +156,8 @@ void playerInput(bool canJump)
 	jump(canJump);
 	errorHandler();
 }
+
+
 void makeMap()
 {
 	fstream file;
@@ -189,8 +208,6 @@ void drawMap()
 
 void playGame()
 {
-	int life = 3;
-	int score = 0;
 	bool isOnGround = true;
 	bool isJumping = false;
 	bool isMovingLeft = false;
@@ -200,14 +217,16 @@ void playGame()
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
 	
+	makeMap();
 
 	while (life > 0)
 	{
 		cout << "Lives: " << life << "                      Score: " << score << endl;
 		
 		playerInput(isOnGround);
-		makeMap();
+		coinCheck();
 		drawMap();
+
 
 		//char x = map[position[0]][position[1]];
 		//gravity applied when air is beneath player
