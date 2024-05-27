@@ -98,7 +98,7 @@ void jump(bool canJump)
 	{
 		switch (howHigh())	//how high can a player jump
 		{
-		case 0:
+    case 0:
 			break;
 		case 1:
 			oneBlockUp();
@@ -124,6 +124,9 @@ void jump(bool canJump)
 			oneBlockUp();
 			break;
 		}
+
+
+
 	}
 }
 
