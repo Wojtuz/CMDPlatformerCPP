@@ -24,9 +24,6 @@ public:
 	int exPosX;
 	int exPosY;
 
-	int position[2];
-	int exPosition[2];
-
 	bool canJump = true;
 	bool isOnGround = true;
 	bool isJumping = false;
@@ -252,7 +249,7 @@ void playGame()
 
 		//char x = map[posY][player.posX];
 		//gravity applied when air is beneath player
-		player.isOnGround = applyGravity();
+		player.canJump = applyGravity();
 		
 		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
