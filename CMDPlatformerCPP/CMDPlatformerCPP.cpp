@@ -42,7 +42,7 @@ void choice(int choice)
 	switch (choice)
 	{
 	case 1:
-		createPlayer();
+		setNickname();
 		playGame();
 		break;
 	case 2:

@@ -8,26 +8,58 @@ using namespace std;
 
 int life = 3;
 int score = 0;
-int spos = 0;
-size_t found;
+
 const int x = 120;
 const int y = 27;
-char sign = '-';
+
 char map[y][x];
-int position[2] = { y-3, 1 };
-int exPosition[2] = { y-3, 1 };
-
 string temp;
-string nickname;
-string line;
+
+class Player
+{
+public:
+	Player();
+	int posX;
+	int posY;
+	int exPosX;
+	int exPosY;
+
+	bool canJump = true;
+	bool isOnGround = true;
+	bool isJumping = false;
+	bool isMovingLeft = false;
+	bool isMovingRight = false;
+	bool isDead = false;
+
+	string nickname;
+
+};
+Player::Player()
+{
+	posY = y - 3;
+	posX = 1;
+	exPosY = y - 3;
+	exPosX = 1;
+}
+
+Player player;
 
 
+void setConsoleColor(int background, int foreground)
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
+}
+
+void ResetColor() { 
+	cout << "\033[0m"; 
+}
 
 void ClearScreen()
 {
-	COORD cursorPosition;	
-	cursorPosition.X = 0;	
-	cursorPosition.Y = 0;	
+	COORD cursorPosition;
+	cursorPosition.X = 0;
+	cursorPosition.Y = 0;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
 void GetDesktopResolution(int& horizontal, int& vertical)
@@ -35,30 +67,31 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
-    horizontal = desktop.right;
+	horizontal = desktop.right;
 	vertical = desktop.bottom;
 }
 
 void coinCheck()
 {
-	if (map[position[0]][position[1]] == '$')
+
+	if (map[player.posY][player.posX] == '$')
 	{
-		map[position[0]][position[1]] = ' ';
+		map[player.posY][player.posX] = ' ';
 		score++;
 	}
 }
 void lifeCheck() {
-	if (map[position[0]][position[1]] == 'X')
+	if (map[player.posY][player.posX] == 'X')
 	{
 		life--;
-		position[1]-=3;
+		player.posX -= 3;
 	}
 }
 
 void exPosUpdate()
 {
-	exPosition[0] = position[0];
-	exPosition[1] = position[1];
+	player.exPosY = player.posY;
+	player.exPosX = player.posX;
 }
 
 int howHigh()
@@ -66,7 +99,7 @@ int howHigh()
 	int above = 0;
 	for (int i = 1; i < 5; i++)
 	{
-		if (map[position[0]-i][position[1]] != '[')
+		if (map[player.posY - i][player.posX] != '[')
 		{
 			above++;
 		}
@@ -80,34 +113,34 @@ int howHigh()
 
 void leftRightDown()
 {
-	if (GetAsyncKeyState(VK_LEFT) && position[1] > 1 && map[position[0]][position[1] - 1] != '[')
+	if (GetAsyncKeyState(VK_LEFT) && player.posX > 1 && map[player.posY][player.posX - 1] != '[')
 	{
-		position[1]--;
+		player.posX--;
 	}
-	if (GetAsyncKeyState(VK_RIGHT) && position[1] < x - 2 && map[position[0]][position[1] + 1] != '[')
+	if (GetAsyncKeyState(VK_RIGHT) && player.posX < x - 2 && map[player.posY][player.posX + 1] != '[')
 	{
-		position[1]++;
+		player.posX++;
 	}
-	if (GetAsyncKeyState(VK_DOWN) && position[0] < y - 2 && map[position[0] + 1][position[1]] != '[')
+	if (GetAsyncKeyState(VK_DOWN) && player.posY < y - 2 && map[player.posY + 1][player.posX] != '[')
 	{
-		position[0]++;
+		player.posY++;
 	}
 }
 
 void oneBlockUp()
 {
 	exPosUpdate();
-	position[0]--;
+	player.posY--;
 	coinCheck();
 }
 
-void jump(bool canJump)
+void jump()
 {
-	if (GetAsyncKeyState(VK_UP) && position[0] > 1 && canJump == true)
+	if (GetAsyncKeyState(VK_UP) && player.posY > 1 && player.canJump == true)
 	{
 		switch (howHigh())	//how high can a player jump
 		{
-    case 0:
+		case 0:
 			break;
 		case 1:
 			oneBlockUp();
@@ -142,13 +175,14 @@ void jump(bool canJump)
 bool applyGravity()
 {
 	bool isOnGround;
-	if (map[position[0] + 1][position[1]] == '[' || map[position[0] + 1][position[1]] == '~')
+	if (map[player.posY + 1][player.posX] == '[' || map[player.posY + 1][player.posX] == '~')
+
 	{
 		isOnGround = true;
 	}
 	else
 	{
-		position[0]++;
+		player.posY++;
 		isOnGround = false;
 	}
 	return isOnGround;
@@ -156,16 +190,23 @@ bool applyGravity()
 
 void errorHandler()
 {
-	if (map[position[0]][position[1]] == '[')
+	if (map[player.posY][player.posX] == '[')
 	{
-		position[0]--;
+		player.posY--;
 	}
 }
 
-void playerInput(bool canJump)
-{	
+void setNickname() {
+
+	cout << "Enter your nickname: " << endl;
+	cin >> player.nickname;
+	system("cls");
+}
+
+void playerInput()
+{
 	leftRightDown();
-	jump(canJump);
+	jump();
 	errorHandler();
 }
 
@@ -195,63 +236,75 @@ void makeMap()
 }
 void drawMap()
 {
-	
+
+
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
 		{
-			if (i == position[0] && j == position[1])
+			if (i == player.posY && j == player.posX)
 			{
+				setConsoleColor(9, 0);
 				cout << "O";
+				setConsoleColor(9, 10);
 			}
-			else if (i == 0 || i == y-1 || j == 0 || j == x-1)
+			else switch (map[i][j])
 			{
-				//border/screenbezel
-				cout << "#";
-			}
-			else
-			{
+			case '$':
+				setConsoleColor(9, 14);
+				cout << '$';
+				setConsoleColor(9, 10);
+				break;
+			case 'X':
+				setConsoleColor(9, 12);
+				cout << 'X';
+				setConsoleColor(9, 10);
+				break;
+			case '~':
+				setConsoleColor(9, 15);
+				cout << '~';
+				setConsoleColor(9, 10);
+				break;
+			case '#':
+				setConsoleColor(13, 13);
+				cout << '#';
+				setConsoleColor(9, 10);
+				break;
+			default:
 				cout << map[i][j];
+				break;
 			}
 		}
 		cout << endl;
 	}
 }
-void createPlayer() {
 
-	cout << "Enter your nickname: " << endl;
-	cin >> nickname;
-	system("cls");
-}
 void playGame()
 {
-	score = 0;
-	life = 3;
-	bool isOnGround = true;
-	bool isJumping = false;
-	bool isMovingLeft = false;
-	bool isMovingRight = false;
-	bool isDead = false;
-	
+	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-	
+
 	makeMap();
 
 	while (life > 0)
 	{
+		setConsoleColor(0, 15);
 		cout << "Lives: " << life << "                      Score: " << score << endl;
-		
-		playerInput(isOnGround);
+		setConsoleColor(9, 10);
+
+		playerInput();
+
 		coinCheck();
 		lifeCheck();
 		drawMap();
 
 
-		//char x = map[position[0]][position[1]];
+		//char x = map[posY][player.posX];
 		//gravity applied when air is beneath player
-		isOnGround = applyGravity();
-		
+		player.canJump = applyGravity();
+
+
 		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
@@ -259,15 +312,15 @@ void playGame()
 	fstream file;
 	file.open("scoreboard.txt", ios::out | ios::app);
 	if (file.is_open()) {
-		file << nickname << " " << score << endl;
+		file << player.nickname << " " << score << endl;
 		file.close();
-		
+
 	}
 	else {
 		cout << "Unable to open a file!" << endl;
 	}
 	system("cls");
+	ResetColor();
 	cout << "Lifes ended. GAME OVER!" << endl;
 	cout << "Press any key to continue" << endl;
-
 }

@@ -4,5 +4,5 @@
 // Declaration of myFunction
 int menu(bool firstTime);
 void playGame();
-void createPlayer();
+void setNickname();
 #endif
