@@ -43,6 +43,12 @@ Player::Player()
 Player player;
 
 
+void setConsoleColor(int background, int foreground) 
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
+}
+
 void ClearScreen()
 {
 	COORD cursorPosition;	
@@ -209,22 +215,42 @@ void makeMap()
 void drawMap()
 {
 	
+	
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
 		{
 			if (i == player.posY && j == player.posX)
 			{
+				setConsoleColor(9, 0);
 				cout << "O";
+				setConsoleColor(9, 10);
 			}
-			else if (i == 0 || i == y-1 || j == 0 || j == x-1)
+			else switch (map[i][j])
 			{
-				//border/screenbezel
-				cout << "#";
-			}
-			else
-			{
+			case '$':
+				setConsoleColor(9, 14);
+				cout << '$';
+				setConsoleColor(9, 10);
+				break;
+			case 'X':
+				setConsoleColor(9, 12);
+				cout << 'X';
+				setConsoleColor(9, 10);
+				break;
+			case '~':
+				setConsoleColor(9, 15);
+				cout << '~';
+				setConsoleColor(9, 10);
+				break;
+			case '#':
+				setConsoleColor(13, 13);
+				cout << '#';
+				setConsoleColor(9, 10);
+				break;
+			default:
 				cout << map[i][j];
+				break;
 			}
 		}
 		cout << endl;
@@ -233,15 +259,17 @@ void drawMap()
 
 void playGame()
 {
+	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-	
 	makeMap();
 
 	while (life > 0)
 	{
+		setConsoleColor(0, 15);
 		cout << "Lives: " << life << "                      Score: " << score << endl;
-		
+		setConsoleColor(9, 10);
+
 		playerInput();
 		coinCheck();
 		drawMap();
