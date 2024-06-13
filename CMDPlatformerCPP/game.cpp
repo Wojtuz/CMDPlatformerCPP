@@ -8,16 +8,18 @@ using namespace std;
 
 int life = 3;
 int score = 0;
-
+int spos = 0;
+size_t found;
 const int x = 120;
 const int y = 27;
-
+char sign = '-';
 char map[y][x];
 int position[2] = { y-3, 1 };
 int exPosition[2] = { y-3, 1 };
 
 string temp;
-
+string nickname;
+string line;
 
 
 
@@ -215,7 +217,12 @@ void drawMap()
 		cout << endl;
 	}
 }
+void createPlayer() {
 
+	cout << "Enter your nickname: " << endl;
+	cin >> nickname;
+	system("cls");
+}
 void playGame()
 {
 	score = 0;
@@ -225,7 +232,7 @@ void playGame()
 	bool isMovingLeft = false;
 	bool isMovingRight = false;
 	bool isDead = false;
-
+	
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
 	
@@ -249,10 +256,17 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
+	fstream file;
+	file.open("scoreboard.txt", ios::out | ios::app);
+	if (file.is_open()) {
+		file << nickname << " " << score << endl;
+		file.close();
+		
+	}
+	else {
+		cout << "Unable to open a file!" << endl;
+	}
 	system("cls");
-	fstream scores;
-	scores.open("scoreboard.txt", ios::out);
-
 	cout << "Lifes ended. GAME OVER!" << endl;
 	cout << "Press any key to continue" << endl;
 

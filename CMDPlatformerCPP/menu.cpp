@@ -10,8 +10,8 @@ int menu(bool firstTime)
 	cout << "1. Play Game" << endl; // Actually it works
 	cout << "2. Scoreboard" << endl; //Actually it works
 	//we can add binds to rebind movement keys
-	//we can add a instructions page
-	cout << "3. Exit" << endl;
+	cout << "3. How to play?" << endl;
+	cout << "4. Exit" << endl;
 	cout << "Please enter the number of the option you would like to select: ";
 	int choice;
 	cin >> choice;

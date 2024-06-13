@@ -1,33 +1,19 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
+#include <Windows.h>
+#include <conio.h>
 #include "header.h" //we can use this to store functions regarding different parts of the program, like the menu, the game, etc. so that we can split the code into multiple files and see (github) what changed in each file
 using namespace std;
 
 int exitGame = 0;
 string null;
-string nickname;
 string scores;
-
 void playGame();
 void choice(int choice);
-void createPlayer() {
 
-		cout << "Enter your nickname: " << endl;
-		cin >> nickname;
-		fstream file;
-		file.open("scoreboard.txt", ios::out | ios::app);
-		if (file.is_open()) {
-			file << nickname << " " << "0" << endl;
-			file.close();
-			system("cls");
-		}
-		else {
-			cout << "Unable to open a file!" << endl;
-		}
 		
-	
-}
+
 void openScoreboard() {
 	fstream file;
 	file.open("scoreboard.txt", ios::in);
@@ -62,8 +48,20 @@ void choice(int choice)
 	case 2:
 		cout << "Scoreboard" << endl;
 		openScoreboard();
-		break;
+		cout << "Press any key to return to main menu.";
+	    break;
 	case 3:
+		cout << "How to play?" << endl;
+		cout << "Your main goal is to finish the map. Collect coins and scores." << endl;
+		cout << "Avoid spikes, because they can harm you. REMEMBER, you have ONLY 3 lifes!" << endl;
+		cout << "Control keys: " << endl;
+		cout << "UP Arrow - jumping" << endl;
+		cout << "RIGHT Arrow - walking forward" << endl;
+		cout << "LEFT Arrow - walking backward" << endl;
+		cout << "DOWN Arrow - falling down" << endl;
+		cout << "GLHF!" << endl;
+		break;
+	case 4:
 		exitGame = 1;
 		break;
 	default:
