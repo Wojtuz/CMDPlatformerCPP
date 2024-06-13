@@ -49,6 +49,7 @@ void setConsoleColor(int background, int foreground)
 	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
 }
 
+
 void ClearScreen()
 {
 	COORD cursorPosition;	
@@ -67,7 +68,8 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 
 void coinCheck()
 {
-	if (map[player.posY][player.posX] == '$')
+
+  if (map[player.posY][player.posX] == '$')
 	{
 		map[player.posY][player.posX] = ' ';
 		score++;
@@ -110,6 +112,10 @@ void leftRightDown()
 	if (GetAsyncKeyState(VK_DOWN) && player.posY < y - 2 && map[player.posY + 1][player.posX] != '[')
 	{
 		player.posY++;
+	}
+	if (GetAsyncKeyState(VK_DOWN) && position[0] < y - 2 && map[position[0] + 1][position[1]] != '[')
+	{
+		position[0]++;
 	}
 }
 
@@ -162,6 +168,7 @@ bool applyGravity()
 {
 	bool isOnGround;
 	if (map[player.posY + 1][player.posX] == '[' || map[player.posY + 1][player.posX] == '~')
+
 	{
 		isOnGround = true;
 	}
@@ -179,6 +186,15 @@ void errorHandler()
 	{
 		player.posY--;
 	}
+}
+
+
+
+void playerInput(bool canJump)
+{	
+	leftRightDown();
+	jump(canJump);
+	errorHandler();
 }
 
 void playerInput()
@@ -262,6 +278,7 @@ void playGame()
 	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
+
 	makeMap();
 
 	while (life > 0)
@@ -271,6 +288,7 @@ void playGame()
 		setConsoleColor(9, 10);
 
 		playerInput();
+
 		coinCheck();
 		drawMap();
 
@@ -278,6 +296,7 @@ void playGame()
 		//char x = map[posY][player.posX];
 		//gravity applied when air is beneath player
 		player.canJump = applyGravity();
+
 		
 		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
