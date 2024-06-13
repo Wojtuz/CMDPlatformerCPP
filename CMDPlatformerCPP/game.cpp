@@ -113,10 +113,6 @@ void leftRightDown()
 	{
 		player.posY++;
 	}
-	if (GetAsyncKeyState(VK_DOWN) && position[0] < y - 2 && map[position[0] + 1][position[1]] != '[')
-	{
-		position[0]++;
-	}
 }
 
 void oneBlockUp()
@@ -189,13 +185,6 @@ void errorHandler()
 }
 
 
-
-void playerInput(bool canJump)
-{	
-	leftRightDown();
-	jump(canJump);
-	errorHandler();
-}
 
 void playerInput()
 {	
