@@ -15,7 +15,8 @@ void choice(int choice);
 
 		
 
-void openScoreboard() {
+void openScoreboard() 
+{
 	fstream file;
 	file.open("scoreboard.txt", ios::in);
 	if (file.is_open()) {
