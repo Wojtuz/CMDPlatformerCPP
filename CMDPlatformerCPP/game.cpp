@@ -46,6 +46,7 @@ Player player;
 
 
 void setConsoleColor(int background, int foreground)
+
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
