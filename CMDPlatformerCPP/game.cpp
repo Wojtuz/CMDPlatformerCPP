@@ -31,8 +31,6 @@ public:
 	bool isMovingRight = false;
 	bool isDead = false;
 
-	string nickname;
-
 };
 Player::Player()
 {
@@ -43,6 +41,13 @@ Player::Player()
 }
 
 Player player;
+
+
+void setConsoleColor(int background, int foreground) 
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
+}
 
 
 void setConsoleColor(int background, int foreground)
@@ -236,8 +241,6 @@ void makeMap()
 }
 void drawMap()
 {
-
-
 	for (int i = 0; i < y; i++)
 	{
 		for (int j = 0; j < x; j++)
@@ -303,7 +306,6 @@ void playGame()
 		//char x = map[posY][player.posX];
 		//gravity applied when air is beneath player
 		player.canJump = applyGravity();
-
 
 		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
 		ClearScreen(); //This is the command to clear the console
