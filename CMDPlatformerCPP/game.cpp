@@ -415,8 +415,15 @@ void win()
 	ResetColor();
 	system("cls");
 	displayLevelCleared();
-	cout << "Press any key to continue" << endl;
+	cout << "Press BACKSPACE to continue" << endl;
 	saveScore();
+	while (1) {
+		if (GetAsyncKeyState(VK_BACK)) {
+			system("cls");
+			break;
+		}
+
+	}
 }
 
 void lost()
@@ -424,6 +431,13 @@ void lost()
 	ResetColor();
 	system("cls");
 	displayGameOver();
-	cout << "Lifes ended. Press any key to continue" << endl;
+	cout << "Lifes ended. Press BACKSPACE to continue" << endl;
 	saveScore();
+	while (1) {
+		if (GetAsyncKeyState(VK_BACK)) {
+			system("cls");
+			break;
+		}
+
+	}
 }

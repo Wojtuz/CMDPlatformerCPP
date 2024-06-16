@@ -4,3 +4,10 @@ Dubus 22
 Dubus 1
 DFubus 13
 2 11
+JD 25
+Dubus 0
+Dubus 0
+Dubus 2
+d 1
+Jakub 4
+Dudus 18

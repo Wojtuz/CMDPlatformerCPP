@@ -59,7 +59,7 @@ void choice(int choice)
 
 			}
 			break;
-		case 4:
+			case 4:
 			exitGame = 1;
 			break;
 		default:
