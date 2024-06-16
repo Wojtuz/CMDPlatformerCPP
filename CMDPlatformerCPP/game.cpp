@@ -26,6 +26,7 @@ public:
 	int posY;
 	int exPosX;
 	int exPosY;
+	int level = 1;
 
 	bool Won = false;
 	bool canJump = true;
@@ -44,6 +45,16 @@ public:
 		exPosX = 1;
 		life = 3;
 		score = 0;
+	}
+
+	void nextLevel()
+	{
+		posY = y - 3;
+		posX = 1;
+		exPosY = y - 3;
+		exPosX = 1;
+		life = 3;
+		Won = false;
 	}
 
 };
@@ -266,11 +277,12 @@ void makeMap()
 	fstream file;
 	if (!file)
 	{
-		cout << "Map has not been found." << endl;
+		cout << "Next map has not been found." << endl;
+		cout << "You can create another map by creating MapX.txt (X being level number you want to create. Use Insert to make it easier c:)." << endl;
 	}
 	else
 	{
-		file.open("Map1.txt", ios::in);
+		file.open("Map" + to_string(player.level) + ".txt", ios::in);
 		for (int i = 0; i < 27; i++)
 		{
 			getline(file, temp, '\n');
@@ -387,8 +399,12 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
-	if (player.Won) {
+	if (player.Won)
+	{
 		win();
+		player.level++;
+		player.nextLevel();
+		playGame();
 	}
 	else {
 		lost();
