@@ -130,6 +130,7 @@
     <ClCompile Include="CMDPlatformerCPP.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="scoreboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h" />
