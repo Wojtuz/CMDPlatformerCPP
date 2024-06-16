@@ -7,7 +7,7 @@
 using namespace std;
 
 
-
+int levels = 2;
 const int x = 120;
 const int y = 27;
 
@@ -278,21 +278,35 @@ void makeMap()
 	if (!file)
 	{
 		cout << "Next map has not been found." << endl;
-		cout << "You can create another map by creating MapX.txt (X being level number you want to create. Use Insert to make it easier c:)." << endl;
 	}
 	else
 	{
-		file.open("Map" + to_string(player.level) + ".txt", ios::in);
-		for (int i = 0; i < 27; i++)
-		{
-			getline(file, temp, '\n');
+		if (player.level > levels) {
+			ResetColor();
+			system("cls");
+			cout << "You can create another map by creating MapX.txt (X being level number you want to create. Use Insert to make it easier c:)." << endl;
+			cout << "Press BACKSPACE to continue" << endl;
+			while (1) {
+				if (GetAsyncKeyState(VK_BACK)) {
+					system("cls");
+					break;
+				}
 
-			for (int j = 0; j < 120; j++)
-			{
-				map[i][j] = temp[j];
 			}
 		}
-		file.close();
+		else {
+			file.open("Map" + to_string(player.level) + ".txt", ios::in);
+			for (int i = 0; i < 27; i++)
+			{
+				getline(file, temp, '\n');
+
+				for (int j = 0; j < 120; j++)
+				{
+					map[i][j] = temp[j];
+				}
+			}
+			file.close();
+		}
 	}
 
 }
@@ -399,12 +413,15 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
-	if (player.Won)
+	if (player.Won && player.level<=levels)
 	{
 		win();
 		player.level++;
 		player.nextLevel();
 		playGame();
+	}
+	if(player.Won && player.level > levels){
+		makeMap();
 	}
 	else {
 		lost();
