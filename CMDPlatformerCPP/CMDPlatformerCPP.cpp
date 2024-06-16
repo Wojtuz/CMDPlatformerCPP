@@ -50,6 +50,14 @@ void choice(int choice)
 			cout << "LEFT Arrow - walking backward" << endl;
 			cout << "DOWN Arrow - falling down" << endl;
 			cout << "GLHF!" << endl;
+			cout << "Press BACKSPACE to return to main menu. " << endl;
+			while (1) {
+				if (GetAsyncKeyState(VK_BACK)) {
+					system("cls");
+					break;
+				}
+
+			}
 			break;
 		case 4:
 			exitGame = 1;
