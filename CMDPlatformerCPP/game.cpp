@@ -79,7 +79,26 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	horizontal = desktop.right;
 	vertical = desktop.bottom;
 }
-
+void displayGameOver() {
+	cout << " _______  _______  __   __  _______    _______  __   __  _______  ______    __  " << endl;
+	cout << "|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |  |  | " << endl;
+	cout << "|    ___||  |_|  ||       ||    ___|  |   _   ||  |_|  ||    ___||   | ||  |  | " << endl;
+	cout << "|   | __ |       ||       ||   |___   |  | |  ||       ||   |___ |   |_||_ |  | " << endl;
+	cout << "|   ||  ||       ||       ||    ___|  |  |_|  ||       ||    ___||    __  ||__| " << endl;
+	cout << "|   |_| ||   _   || ||_|| ||   |___   |       | |     | |   |___ |   |  | | __  " << endl;
+	cout << "|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_||__| " << endl;
+	cout <<"                                                                                 " << endl;
+}
+void displayLevelCleared() {
+	cout << " ___      _______  __   __  _______  ___        _______  ___      _______  _______  ______    _______  ______   __  " << endl;
+	cout << "|   |    |       ||  | |  ||       ||   |      |       ||   |    |       ||   _   ||    _ |  |       ||      | |  | " << endl;
+	cout << "|   |    |    ___||  |_|  ||    ___||   |      |       ||   |    |    ___||  |_|  ||   | ||  |    ___||  _    ||  | " << endl;
+	cout << "|   |    |   |___ |       ||   |___ |   |      |       ||   |    |   |___ |       ||   |_||_ |   |___ | | |   ||  | " << endl;
+	cout << "|   |___ |    ___||       ||    ___||   |___   |      _||   |___ |    ___||       ||    __  ||    ___|| |_|   ||__| " << endl;
+	cout << "|       ||   |___  |     | |   |___ |       |  |     |_ |       ||   |___ |   _   ||   |  | ||   |___ |       | __  " << endl;
+	cout << "|_______||_______|  |___|  |_______||_______|  |_______||_______||_______||__| |__||___|  |_||_______||______| |__| " << endl;
+	cout << "                                                                                                                    " << endl;
+}
 void eventCheck()
 {
 	switch (map[player.posY][player.posX])
@@ -343,7 +362,7 @@ void playGame()
 
 
 	player.setup();
-	while (player.life > 0 || player.Won)
+	while (player.life > 0 || !player.Won)
 	{
 		setConsoleColor(0, 15);
 		cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
@@ -368,7 +387,12 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
-	lost();
+	if (player.Won) {
+		win();
+	}
+	else {
+		lost();
+	}
 }
 
 void saveScore()
@@ -390,7 +414,7 @@ void win()
 {
 	system("cls");
 	ResetColor();
-	cout << "Level cleared!" << endl;
+	displayLevelCleared();
 	cout << "Press any key to continue" << endl;
 	saveScore();
 }
@@ -400,7 +424,7 @@ void lost()
 
 	system("cls");
 	ResetColor();
-	cout << "Lifes ended. GAME OVER!" << endl;
-	cout << "Press any key to continue" << endl;
+	displayGameOver();
+	cout << "Lifes ended. Press any key to continue" << endl;
 	saveScore();
 }
