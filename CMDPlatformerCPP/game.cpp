@@ -362,7 +362,7 @@ void playGame()
 
 
 	player.setup();
-	while (player.life > 0 || !player.Won)
+	while (player.life > 0 && !player.Won)
 	{
 		setConsoleColor(0, 15);
 		cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
@@ -412,8 +412,8 @@ void saveScore()
 
 void win()
 {
-	system("cls");
 	ResetColor();
+	system("cls");
 	displayLevelCleared();
 	cout << "Press any key to continue" << endl;
 	saveScore();
@@ -421,9 +421,8 @@ void win()
 
 void lost()
 {
-
-	system("cls");
 	ResetColor();
+	system("cls");
 	displayGameOver();
 	cout << "Lifes ended. Press any key to continue" << endl;
 	saveScore();
