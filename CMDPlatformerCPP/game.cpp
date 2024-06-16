@@ -116,7 +116,7 @@ void eventCheck()
 void lifeCheck() {
 	if (map[player.posY][player.posX] == 'X')
 	{
-		life--;
+		player.life--;
 		player.posX -= 3;
 	}
 }
