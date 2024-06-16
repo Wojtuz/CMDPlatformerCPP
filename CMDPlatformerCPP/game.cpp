@@ -22,7 +22,6 @@ public:
 	string nickname;
 	int life;
 	int score;
-
 	int posX;
 	int posY;
 	int exPosX;
@@ -56,7 +55,6 @@ Player::Player()
 Player player;
 
 void setConsoleColor(int background, int foreground)
-
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
@@ -113,6 +111,13 @@ void eventCheck()
 		break;
 	default:
 		break;
+	}
+}
+void lifeCheck() {
+	if (map[player.posY][player.posX] == 'X')
+	{
+		life--;
+		player.posX -= 3;
 	}
 }
 
@@ -351,6 +356,7 @@ void playGame()
 		
 
 		eventCheck();
+
 		drawMap();
 
 
@@ -391,6 +397,7 @@ void win()
 
 void lost()
 {
+
 	system("cls");
 	ResetColor();
 	cout << "Lifes ended. GAME OVER!" << endl;
