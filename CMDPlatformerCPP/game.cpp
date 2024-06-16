@@ -28,6 +28,7 @@ public:
 	int exPosX;
 	int exPosY;
 
+	bool Won = false;
 	bool canJump = true;
 	bool isOnGround = true;
 	bool isJumping = false;
@@ -54,11 +55,6 @@ Player::Player()
 
 Player player;
 
-void win()
-{
-	cout << "Level cleared!";
-}
-
 void setConsoleColor(int background, int foreground)
 
 {
@@ -67,7 +63,7 @@ void setConsoleColor(int background, int foreground)
 }
 
 void ResetColor() { 
-	cout << "\033[0m"; 
+	setConsoleColor(0, 15);
 }
 
 void ClearScreen()
@@ -102,7 +98,18 @@ void eventCheck()
 		player.doubleJump = true;
 		break;
 	case '|':
-		win();
+		player.Won = true;
+		Sleep(400);
+		if (player.life > 0)
+		{
+			player.life--;
+			Sleep(100);
+			player.score += 10;
+		}
+		else
+		{
+
+		}
 		break;
 	default:
 		break;
@@ -331,13 +338,17 @@ void playGame()
 
 
 	player.setup();
-	while (player.life > 0)
+	while (player.life > 0 || player.Won)
 	{
 		setConsoleColor(0, 15);
 		cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
 		setConsoleColor(9, 10);
 
-		playerInput();
+		if (!player.Won)
+		{
+			playerInput();
+		}
+		
 
 		eventCheck();
 		drawMap();
@@ -351,18 +362,38 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
+	lost();
+}
+
+void saveScore()
+{
 	fstream file;
 	file.open("scoreboard.txt", ios::out | ios::app);
-	if (file.is_open()) {
+	if (file.is_open()) 
+	{
 		file << player.nickname << " " << player.score << endl;
 		file.close();
-
 	}
-	else {
+	else 
+	{
 		cout << "Unable to open a file!" << endl;
 	}
+}
+
+void win()
+{
+	system("cls");
+	ResetColor();
+	cout << "Level cleared!" << endl;
+	cout << "Press any key to continue" << endl;
+	saveScore();
+}
+
+void lost()
+{
 	system("cls");
 	ResetColor();
 	cout << "Lifes ended. GAME OVER!" << endl;
 	cout << "Press any key to continue" << endl;
+	saveScore();
 }
