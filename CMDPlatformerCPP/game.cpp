@@ -6,8 +6,7 @@
 #include <wtypes.h>
 using namespace std;
 
-int life = 3;
-int score = 0;
+
 
 const int x = 120;
 const int y = 27;
@@ -21,39 +20,48 @@ public:
 	Player();
 
 	string nickname;
+	int life;
+	int score;
 	int posX;
 	int posY;
 	int exPosX;
 	int exPosY;
 
+	bool Won = false;
 	bool canJump = true;
 	bool isOnGround = true;
 	bool isJumping = false;
 	bool isMovingLeft = false;
 	bool isMovingRight = false;
 	bool isDead = false;
+	bool doubleJump = false;
+
+	void setup()
+	{
+		posY = y - 3;
+		posX = 1;
+		exPosY = y - 3;
+		exPosX = 1;
+		life = 3;
+		score = 0;
+	}
 
 };
 Player::Player()
 {
-	posY = y - 3;
-	posX = 1;
-	exPosY = y - 3;
-	exPosX = 1;
+	setup();
 }
 
 Player player;
 
-
 void setConsoleColor(int background, int foreground)
-
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, background * 16 + foreground);
 }
 
 void ResetColor() { 
-	cout << "\033[0m"; 
+	setConsoleColor(0, 15);
 }
 
 void ClearScreen()
@@ -72,13 +80,37 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	vertical = desktop.bottom;
 }
 
-void coinCheck()
+void eventCheck()
 {
-
-	if (map[player.posY][player.posX] == '$')
+	switch (map[player.posY][player.posX])
 	{
+	case '$':
 		map[player.posY][player.posX] = ' ';
-		score++;
+		player.score++;
+		break;
+	case 'X':
+		player.life--;
+		player.posX -= 2;
+		break;
+	case '&':
+		player.doubleJump = true;
+		break;
+	case '|':
+		player.Won = true;
+		Sleep(400);
+		if (player.life > 0)
+		{
+			player.life--;
+			Sleep(100);
+			player.score += 10;
+		}
+		else
+		{
+
+		}
+		break;
+	default:
+		break;
 	}
 }
 void lifeCheck() {
@@ -132,13 +164,14 @@ void oneBlockUp()
 {
 	exPosUpdate();
 	player.posY--;
-	coinCheck();
+	eventCheck();
 }
 
 void jump()
 {
-	if (GetAsyncKeyState(VK_UP) && player.posY > 1 && player.canJump == true)
+	if (GetAsyncKeyState(VK_UP) && player.posY > 1 && (player.canJump || player.doubleJump))
 	{
+		player.doubleJump = false;
 		switch (howHigh())	//how high can a player jump
 		{
 		case 0:
@@ -167,9 +200,6 @@ void jump()
 			oneBlockUp();
 			break;
 		}
-
-
-
 	}
 }
 
@@ -235,6 +265,11 @@ void makeMap()
 	}
 
 }
+
+// Color codes:
+// 0 = Black, 1 = Blue, 2 = Green, 3 = Aqua, 4 = Red, 5 = Purple, 6 = Yellow, 7 = White,
+// 8 = Gray, 9 = Light Blue, 10 = Light Green, 11 = Light Aqua, 12 = Light Red, 13 = Light Purple, 14 = Light Yellow, 15 = Bright White
+
 void drawMap()
 {
 	for (int i = 0; i < y; i++)
@@ -264,9 +299,29 @@ void drawMap()
 				cout << '~';
 				setConsoleColor(9, 10);
 				break;
+			case '&':
+				setConsoleColor(9, 11);
+				cout << '&';
+				setConsoleColor(9, 10);
+				break;
 			case '#':
 				setConsoleColor(13, 13);
 				cout << '#';
+				setConsoleColor(9, 10);
+				break;
+			case '<':
+				setConsoleColor(9, 5);
+				cout << '<';
+				setConsoleColor(9, 10);
+				break;
+			case ']':
+				setConsoleColor(9, 5);
+				cout << ']';
+				setConsoleColor(9, 10);
+				break;
+			case '|':
+				setConsoleColor(9, 5);
+				cout << '|';
 				setConsoleColor(9, 10);
 				break;
 			default:
@@ -283,19 +338,25 @@ void playGame()
 	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-
 	makeMap();
 
-	while (life > 0)
+
+
+	player.setup();
+	while (player.life > 0 || player.Won)
 	{
 		setConsoleColor(0, 15);
-		cout << "Lives: " << life << "                      Score: " << score << endl;
+		cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
 		setConsoleColor(9, 10);
 
-		playerInput();
+		if (!player.Won)
+		{
+			playerInput();
+		}
+		
 
-		coinCheck();
-		lifeCheck();
+		eventCheck();
+
 		drawMap();
 
 
@@ -307,18 +368,39 @@ void playGame()
 		ClearScreen(); //This is the command to clear the console
 		//system("cls"); //
 	}
+	lost();
+}
+
+void saveScore()
+{
 	fstream file;
 	file.open("scoreboard.txt", ios::out | ios::app);
-	if (file.is_open()) {
-		file << player.nickname << " " << score << endl;
+	if (file.is_open()) 
+	{
+		file << player.nickname << " " << player.score << endl;
 		file.close();
-
 	}
-	else {
+	else 
+	{
 		cout << "Unable to open a file!" << endl;
 	}
+}
+
+void win()
+{
+	system("cls");
+	ResetColor();
+	cout << "Level cleared!" << endl;
+	cout << "Press any key to continue" << endl;
+	saveScore();
+}
+
+void lost()
+{
+
 	system("cls");
 	ResetColor();
 	cout << "Lifes ended. GAME OVER!" << endl;
 	cout << "Press any key to continue" << endl;
+	saveScore();
 }
