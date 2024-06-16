@@ -32,32 +32,32 @@ void choice(int choice)
 {
 	switch (choice)
 	{
-	case 1:
-		setNickname();
-		playGame();
-		break;
-	case 2:
-		cout << "Scoreboard" << endl;
-		openScoreboard();
-	    break;
-	case 3:
-		cout << "How to play?" << endl;
-		cout << "Your main goal is to finish the map. Collect coins and scores." << endl;
-		cout << "Avoid spikes, because they can harm you. REMEMBER, you have ONLY 3 lifes!" << endl;
-		cout << "Control keys: " << endl;
-		cout << "UP Arrow - jumping" << endl;
-		cout << "RIGHT Arrow - walking forward" << endl;
-		cout << "LEFT Arrow - walking backward" << endl;
-		cout << "DOWN Arrow - falling down" << endl;
-		cout << "GLHF!" << endl;
-		break;
-	case 4:
-		exitGame = 1;
-		break;
-	default:
-		break;
+		case 1:
+			setNickname();
+			playGame();
+			break;
+		case 2:
+			cout << "Scoreboard" << endl;
+			openScoreboard();
+			break;
+		case 3:
+			cout << "How to play?" << endl;
+			cout << "Your main goal is to finish the map. Collect coins and scores." << endl;
+			cout << "Avoid spikes, because they can harm you. REMEMBER, you have ONLY 3 lifes!" << endl;
+			cout << "Control keys: " << endl;
+			cout << "UP Arrow - jumping" << endl;
+			cout << "RIGHT Arrow - walking forward" << endl;
+			cout << "LEFT Arrow - walking backward" << endl;
+			cout << "DOWN Arrow - falling down" << endl;
+			cout << "GLHF!" << endl;
+			break;
+		case 4:
+			exitGame = 1;
+			break;
+		default:
+			break;
 	}
-	cin >> null;
+	//cin >> null;
 	cout << "\033[2J\033[1;1H";
 }
 

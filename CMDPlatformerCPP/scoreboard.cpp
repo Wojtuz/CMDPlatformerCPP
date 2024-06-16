@@ -6,7 +6,8 @@
 #include <Windows.h>
 #include "header.h"
 using namespace std;
-void openScoreboard() {
+void openScoreboard() 
+{
 	fstream file;
 	file.open("scoreboard.txt", ios::in);
 
@@ -38,7 +39,7 @@ void openScoreboard() {
 	while (1) {
 		if (GetAsyncKeyState(VK_BACK)) {
 			system("cls");
-			menu(false);
+			//menu(false); //Wywo³ujesz funkcjê menu, ale nic nie robisz ze zwracan¹ wartoœci¹ dlatego nie wywo³uje ¿adnej funkcji z menu
 			break;
 		}	
 		
