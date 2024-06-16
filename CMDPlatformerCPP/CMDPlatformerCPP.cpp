@@ -39,7 +39,6 @@ void choice(int choice)
 	case 2:
 		cout << "Scoreboard" << endl;
 		openScoreboard();
-		cout << "Press any key to return to main menu.";
 	    break;
 	case 3:
 		cout << "How to play?" << endl;

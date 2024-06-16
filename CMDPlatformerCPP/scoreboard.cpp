@@ -3,7 +3,8 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
-
+#include <Windows.h>
+#include "header.h"
 using namespace std;
 void openScoreboard() {
 	fstream file;
@@ -31,5 +32,16 @@ void openScoreboard() {
 
 	for (const auto& score : scores) {
 		cout << score.second << " " << score.first << endl;
+		
 	}
+	cout << "Press BACKSPACE to return to main menu. " << endl;
+	while (1) {
+		if (GetAsyncKeyState(VK_BACK)) {
+			system("cls");
+			menu(false);
+			break;
+		}	
+		
+	} 
+	
 }
