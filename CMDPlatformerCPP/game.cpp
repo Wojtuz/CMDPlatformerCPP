@@ -417,11 +417,13 @@ void playGame()
 	{
 		win();
 		player.level++;
-		player.nextLevel();
-		playGame();
-	}
-	if(player.Won && player.level > levels){
-		makeMap();
+		if (player.level > levels) {
+			makeMap();
+		}
+		else {
+			player.nextLevel();
+			playGame();
+		}
 	}
 	else {
 		lost();
