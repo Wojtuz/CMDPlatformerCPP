@@ -10,6 +10,8 @@ using namespace std;
 const int x = 120;
 const int y = 27;
 
+int dmgTick = 0;
+
 char map[y][x];
 string temp;
 
@@ -30,6 +32,7 @@ public:
 	int level = startLVL;
 
 	bool dontMove = false;
+	bool isHurt = false;
 	bool scoring = false;
 	bool Won = false;
 	bool canJump = true;
@@ -133,6 +136,9 @@ void eventCheck()
 	case 'X':
 		player.life--;
 		player.posX -= 2;
+		player.isHurt = true;
+		player.dontMove = true;
+
 		if (player.life == 0)
 		{
 			player.gameOn = false;
@@ -163,14 +169,6 @@ void eventCheck()
 		break;
 	default:
 		break;
-	}
-}
-
-void lifeCheck() {
-	if (map[player.posY][player.posX] == 'X')
-	{
-		player.life--;
-		player.posX -= 3;
 	}
 }
 
@@ -353,7 +351,30 @@ void drawMap()
 		{
 			if (i == player.posY && j == player.posX)
 			{
-				setConsoleColor(9, 0);
+				if (player.isHurt && dmgTick % 2 == 0)
+				{
+					setConsoleColor(9, 12);
+					dmgTick++;
+				}
+				else if (player.isHurt && dmgTick % 2 == 1)
+				{
+					setConsoleColor(9, 0);
+					dmgTick++;
+				}
+				else if (player.doubleJump)
+				{
+					setConsoleColor(9, 11);
+				}
+				else
+				{
+					setConsoleColor(9, 0);
+				}
+				if (dmgTick == 10)
+				{
+					player.dontMove = false;
+					player.isHurt = false;
+					dmgTick = 0;
+				}
 				cout << "O";
 				setConsoleColor(9, 10);
 			}
@@ -422,7 +443,7 @@ void playGame()
 			
 			
 			setConsoleColor(0, 15);
-			cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
+			cout << "Lives: " << player.life << "                      Score: " << player.score << "                      Level: " << player.level << endl;
 			setConsoleColor(9, 10);
 
 			if (!player.dontMove)
