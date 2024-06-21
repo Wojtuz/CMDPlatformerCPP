@@ -142,19 +142,23 @@ void eventCheck()
 		player.doubleJump = true;
 		break;
 	case '|':
-		if (player.life > 0)
+		switch (player.life)
 		{
+		case -1:
+			player.Won = true;
+			player.gameOn = false;
+			break;
+		case 0:
+			player.life--;
+			Sleep(400);
+			break;
+		default:
 			player.life--;
 			Sleep(100);
 			player.score += 10;
 			player.scoring = true;
 			player.dontMove = true;
-		}
-		else
-		{
-			Sleep(400);
-			player.Won = true;
-			player.gameOn = false;
+			break;
 		}
 		break;
 	default:
@@ -415,18 +419,18 @@ void playGame()
 		player.setup();
 		while (player.gameOn)
 		{
+			
+			
+			setConsoleColor(0, 15);
+			cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
+			setConsoleColor(9, 10);
+
 			if (!player.dontMove)
 			{
 				playerInput();
 			}
 
 			eventCheck();
-			
-			setConsoleColor(0, 15);
-			cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
-			setConsoleColor(9, 10);
-
-			
 
 			drawMap();
 
@@ -500,12 +504,12 @@ void lost()
 	displayGameOver();
 	cout << "Lifes ended. Press BACKSPACE to continue" << endl;
 	saveScore();
-	while (1) {
+	while (1) 
+	{
 		if (GetAsyncKeyState(VK_BACK)) {
 			system("cls");
 			break;
 		}
-
 	}
 }
 
