@@ -12,7 +12,7 @@ string scores;
 void playGame();
 void choice(int choice);
 
-		
+fstream file;
 
 
 
@@ -41,22 +41,29 @@ void choice(int choice)
 			openScoreboard();
 			break;
 		case 3:
-			cout << "How to play?" << endl;
-			cout << "Your main goal is to finish the map. Collect coins and scores." << endl;
-			cout << "Avoid spikes, because they can harm you. REMEMBER, you have ONLY 3 lifes!" << endl;
-			cout << "Control keys: " << endl;
-			cout << "UP Arrow - jumping" << endl;
-			cout << "RIGHT Arrow - walking forward" << endl;
-			cout << "LEFT Arrow - walking backward" << endl;
-			cout << "DOWN Arrow - falling down" << endl;
-			cout << "GLHF!" << endl;
-			cout << "Press BACKSPACE to return to main menu. " << endl;
-			while (1) {
+			file.open("howtoplay.txt", ios::in);
+			if (!file.is_open()) 
+			{
+				cout << "File not found" << endl;
+			}
+			else 
+			{
+				string temp;
+				while (getline(file, temp)) 
+				{
+					cout << temp << endl;
+				}
+				file.close();
+			}
+
+			cout << "Press BACKSPACE to continue" << endl;
+
+			while (1) 
+			{
 				if (GetAsyncKeyState(VK_BACK)) {
 					system("cls");
 					break;
 				}
-
 			}
 			break;
 			case 4:

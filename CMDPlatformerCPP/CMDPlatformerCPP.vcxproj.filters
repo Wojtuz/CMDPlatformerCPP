@@ -35,5 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Map2.txt" />
+    <Text Include="howtoplay.txt" />
   </ItemGroup>
 </Project>

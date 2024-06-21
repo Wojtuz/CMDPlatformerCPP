@@ -1,0 +1,27 @@
+########################################################################################################################
+#                                                                                                                      #
+#    Use arrow to move - left and right to move left and right, up to jump, down to move down a block (if possible)    #
+#                                                                                                                      #
+#    X  -  Spikes, they deal damage and move you to safety.                                                            #
+#                                                                                                                      #
+#    [  -  Solid ground, you can neither pass through it from below nor from above (jumping through and down arrow).   #
+#                                                                                                                      #
+#    ~  -  Cloud, you can pass through it from below and from above.                                                   #
+#                                                                                                                      #
+#    $  -  Collecting them increases your score. Compete on the scoreboard!                                            #
+#                                                                                                                      #
+#    &  -  Double jump power-up, after you pass through it you can jump again mid-air! Landing disables this effect.   #
+#                                                                                                                      #
+#   <]                                                                                                                 #
+#    |  -  Flag, touch the flagpole to progress to another level.                                                      #
+#    |                                                                                                                 #
+#                                                                                                                      #
+#    You have 3 lives per level. Use them well. For every life remaining when you reach the flag you will be           #
+#    awarded 10 points.                                                                                                #
+#                                                                                                                      #
+#    If you finished the game and want more you can create your own maps. Fill the template with a map of your dreams  #
+#    and name it "MapX.txt" with (X being a level without a map).                                                      #
+#                                                                                                                      #
+#    Have fun!                                                                                                         #
+#                                                                                                                      #
+########################################################################################################################
