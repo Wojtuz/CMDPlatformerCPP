@@ -7,7 +7,6 @@
 using namespace std;
 
 
-int levels = 2;
 const int x = 120;
 const int y = 27;
 
@@ -91,6 +90,7 @@ void ClearScreen()
 	cursorPosition.Y = 0;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
+
 void GetDesktopResolution(int& horizontal, int& vertical)
 {
 	RECT desktop;
@@ -99,6 +99,7 @@ void GetDesktopResolution(int& horizontal, int& vertical)
 	horizontal = desktop.right;
 	vertical = desktop.bottom;
 }
+
 void displayGameOver() {
 	cout << " _______  _______  __   __  _______    _______  __   __  _______  ______    __  " << endl;
 	cout << "|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |  |  | " << endl;
@@ -109,6 +110,7 @@ void displayGameOver() {
 	cout << "|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_||__| " << endl;
 	cout <<"                                                                                 " << endl;
 }
+
 void displayLevelCleared() {
 	cout << " ___      _______  __   __  _______  ___        _______  ___      _______  _______  ______    _______  ______   __  " << endl;
 	cout << "|   |    |       ||  | |  ||       ||   |      |       ||   |    |       ||   _   ||    _ |  |       ||      | |  | " << endl;
@@ -119,6 +121,7 @@ void displayLevelCleared() {
 	cout << "|_______||_______|  |___|  |_______||_______|  |_______||_______||_______||__| |__||___|  |_||_______||______| |__| " << endl;
 	cout << "                                                                                                                    " << endl;
 }
+
 void eventCheck()
 {
 	switch (map[player.posY][player.posX])
@@ -152,6 +155,7 @@ void eventCheck()
 		break;
 	}
 }
+
 void lifeCheck() {
 	if (map[player.posY][player.posX] == 'X')
 	{
