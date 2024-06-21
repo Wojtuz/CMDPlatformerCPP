@@ -29,14 +29,12 @@ public:
 	int exPosY;
 	int level = startLVL;
 
+	bool dontMove = false;
+	bool scoring = false;
 	bool Won = false;
 	bool canJump = true;
-	bool isOnGround = true;
-	bool isJumping = false;
-	bool isMovingLeft = false;
-	bool isMovingRight = false;
-	bool isDead = false;
 	bool doubleJump = false;
+	bool gameOn = true;
 
 	void setup()
 	{
@@ -56,6 +54,8 @@ public:
 		exPosX = 1;
 		life = 3;
 		Won = false;
+		gameOn = true;
+		dontMove = false;
 	}
 
 	void newGame()
@@ -133,22 +133,28 @@ void eventCheck()
 	case 'X':
 		player.life--;
 		player.posX -= 2;
+		if (player.life == 0)
+		{
+			player.gameOn = false;
+		}
 		break;
 	case '&':
 		player.doubleJump = true;
 		break;
 	case '|':
-		player.Won = true;
-		Sleep(400);
 		if (player.life > 0)
 		{
 			player.life--;
 			Sleep(100);
 			player.score += 10;
+			player.scoring = true;
+			player.dontMove = true;
 		}
 		else
 		{
-
+			Sleep(400);
+			player.Won = true;
+			player.gameOn = false;
 		}
 		break;
 	default:
@@ -403,23 +409,24 @@ void playGame()
 	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-	//player.newGame();
+	player.nextLevel();
 	if(makeMap())
 	{
 		player.setup();
-		while (player.life > 0 && !player.Won)
+		while (player.gameOn)
 		{
+			if (!player.dontMove)
+			{
+				playerInput();
+			}
+
+			eventCheck();
+			
 			setConsoleColor(0, 15);
 			cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
 			setConsoleColor(9, 10);
 
-			if (!player.Won)
-			{
-				playerInput();
-			}
-		
-
-			eventCheck();
+			
 
 			drawMap();
 
