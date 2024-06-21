@@ -437,13 +437,19 @@ void playGame()
 	player.nextLevel();
 	if(makeMap())
 	{
+		
+
 		player.setup();
 		while (player.gameOn)
 		{
-			
-			
+			int shownLife = player.life;
+			if (player.life < 1)
+			{
+				shownLife = 0;
+			}
+
 			setConsoleColor(0, 15);
-			cout << "Lives: " << player.life << "                      Score: " << player.score << "                      Level: " << player.level << endl;
+			cout << "Lives: " << shownLife << "                      Score: " << player.score << "                      Level: " << player.life << endl;
 			setConsoleColor(9, 10);
 
 			if (!player.dontMove)
