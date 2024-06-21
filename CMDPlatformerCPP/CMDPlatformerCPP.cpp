@@ -34,7 +34,7 @@ void choice(int choice)
 	{
 		case 1:
 			setNickname();
-			playGame();
+			startGame();
 			break;
 		case 2:
 			cout << "Scoreboard" << endl;

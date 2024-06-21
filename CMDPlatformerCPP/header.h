@@ -10,4 +10,5 @@ void choice(int choice);
 void win();
 void lost();
 void saveScore();
+void startGame();
 #endif

@@ -14,6 +14,8 @@ const int y = 27;
 char map[y][x];
 string temp;
 
+int startLVL = 1;
+
 class Player
 {
 public:
@@ -26,7 +28,7 @@ public:
 	int posY;
 	int exPosX;
 	int exPosY;
-	int level = 1;
+	int level = startLVL;
 
 	bool Won = false;
 	bool canJump = true;
@@ -57,6 +59,13 @@ public:
 		Won = false;
 	}
 
+	void newGame()
+	{
+		life = 3;
+		score = 0;
+		level = startLVL;
+		Won = false;
+	}
 };
 Player::Player()
 {
@@ -271,44 +280,51 @@ void playerInput()
 	errorHandler();
 }
 
-
-void makeMap()
+void clearMap()
 {
-	fstream file;
-	if (!file)
+	for (int i = 0; i < y; i++)
 	{
-		cout << "Next map has not been found." << endl;
-	}
-	else
-	{
-		if (player.level > levels) {
-			ResetColor();
-			system("cls");
-			cout << "You can create another map by creating MapX.txt (X being level number you want to create. Use Insert to make it easier c:)." << endl;
-			cout << "Press BACKSPACE to continue" << endl;
-			while (1) {
-				if (GetAsyncKeyState(VK_BACK)) {
-					system("cls");
-					break;
-				}
-
-			}
+		for (int j = 0; j < x; j++)
+		{
+			map[i][j] = ' ';
 		}
-		else {
-			file.open("Map" + to_string(player.level) + ".txt", ios::in);
-			for (int i = 0; i < 27; i++)
+	}
+}
+
+bool makeMap()
+{
+	fstream file; 
+	
+	clearMap();
+
+	file.open("Map" + to_string(player.level) + ".txt", ios::in);
+	if (!file.is_open())
+	{
+		cout << "Map" + to_string(player.level) + ".txt not found!" << endl;
+		cout << "You can create another map by creating MapX.txt (X being level number you want to create. Use Insert to make it easier c:)." << endl;
+		cout << "Press BACKSPACE to continue" << endl;
+
+		while (1)
+		{
+			if (GetAsyncKeyState(VK_BACK))
 			{
-				getline(file, temp, '\n');
-
-				for (int j = 0; j < 120; j++)
-				{
-					map[i][j] = temp[j];
-				}
+				system("cls");
+				break;
 			}
-			file.close();
+		}
+
+		return false;
+	}
+	for (int i = 0; i < 27; i++)
+	{
+		getline(file, temp, '\n');
+		for (int j = 0; j < 120; j++)
+		{
+			map[i][j] = temp[j];
 		}
 	}
-
+	file.close();
+	return true;
 }
 
 // Color codes:
@@ -383,48 +399,46 @@ void playGame()
 	setConsoleColor(0, 15);
 	//Make empty map
 	SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-	makeMap();
-
-
-
-	player.setup();
-	while (player.life > 0 && !player.Won)
+	//player.newGame();
+	if(makeMap())
 	{
-		setConsoleColor(0, 15);
-		cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
-		setConsoleColor(9, 10);
-
-		if (!player.Won)
+		player.setup();
+		while (player.life > 0 && !player.Won)
 		{
-			playerInput();
-		}
+			setConsoleColor(0, 15);
+			cout << "Lives: " << player.life << "                      Score: " << player.score << endl;
+			setConsoleColor(9, 10);
+
+			if (!player.Won)
+			{
+				playerInput();
+			}
 		
 
-		eventCheck();
+			eventCheck();
 
-		drawMap();
+			drawMap();
 
 
-		//char x = map[posY][player.posX];
-		//gravity applied when air is beneath player
-		player.canJump = applyGravity();
+			//char x = map[posY][player.posX];
+			//gravity applied when air is beneath player
+			player.canJump = applyGravity();
 
-		//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
-		ClearScreen(); //This is the command to clear the console
-		//system("cls"); //
-	}
-	if (player.Won && player.level<=levels)
-	{
-		win();
-		player.level++;
-		player.nextLevel();
-		playGame();
-	}
-	if(player.Won && player.level > levels){
-		makeMap();
-	}
-	else {
-		lost();
+			//Sleep(1); //This is the delay between each frame (miliseconds) //Additional delay is unnecessary
+			ClearScreen(); //This is the command to clear the console
+			//system("cls"); //
+		}
+		if (player.Won)
+		{
+			win();
+			player.level++;
+			player.nextLevel();
+			playGame();
+		}
+		else 
+		{
+			lost();
+		}
 	}
 }
 
@@ -457,6 +471,15 @@ void win()
 		}
 
 	}
+	system("cls");
+	cout << "Loading";
+	Sleep(100);
+	for (int i = 0; i < 4; i++)
+	{
+		cout << ".";
+		Sleep(100);
+	}
+	system("cls");
 }
 
 void lost()
@@ -473,4 +496,10 @@ void lost()
 		}
 
 	}
+}
+
+void startGame()
+{
+	player.newGame();
+	playGame();
 }
