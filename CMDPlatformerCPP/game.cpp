@@ -31,6 +31,8 @@ public:
 	int exPosY;
 	int level = startLVL;
 
+	char sprite = 'O';
+
 	bool dontMove = false;
 	bool isHurt = false;
 	bool scoring = false;
@@ -47,6 +49,7 @@ public:
 		exPosX = 1;
 		life = 3;
 		score = 0;
+		sprite = 'O';	
 	}
 
 	void nextLevel()
@@ -138,11 +141,6 @@ void eventCheck()
 		player.posX -= 2;
 		player.isHurt = true;
 		player.dontMove = true;
-
-		if (player.life == 0)
-		{
-			player.gameOn = false;
-		}
 		break;
 	case '&':
 		player.doubleJump = true;
@@ -170,6 +168,14 @@ void eventCheck()
 	default:
 		break;
 	}
+
+	if (player.life == 0)
+	{
+		player.gameOn = false;
+		player.isHurt = false;
+		dmgTick = 0;
+	}
+
 }
 
 void exPosUpdate()
@@ -369,13 +375,17 @@ void drawMap()
 				{
 					setConsoleColor(9, 0);
 				}
-				if (dmgTick == 10)
+				if (dmgTick == 8)
 				{
 					player.dontMove = false;
 					player.isHurt = false;
 					dmgTick = 0;
 				}
-				cout << "O";
+				if (player.life == 0 && !player.Won)
+				{
+					player.sprite = '_';
+				}
+				cout << player.sprite;
 				setConsoleColor(9, 10);
 			}
 			else switch (map[i][j])
@@ -424,7 +434,9 @@ void drawMap()
 				cout << map[i][j];
 				break;
 			}
+			
 		}
+		
 		cout << endl;
 	}
 }
@@ -437,8 +449,6 @@ void playGame()
 	player.nextLevel();
 	if(makeMap())
 	{
-		
-
 		player.setup();
 		while (player.gameOn)
 		{
@@ -479,6 +489,7 @@ void playGame()
 		}
 		else 
 		{
+			Sleep(2000);
 			lost();
 		}
 	}
