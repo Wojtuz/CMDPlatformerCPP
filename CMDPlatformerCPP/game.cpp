@@ -146,10 +146,11 @@ void eventCheck()
 		player.doubleJump = true;
 		break;
 	case '|':
+		player.Won = true;
+
 		switch (player.life)
 		{
 		case -1:
-			player.Won = true;
 			player.gameOn = false;
 			break;
 		case 0:
