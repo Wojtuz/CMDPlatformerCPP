@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <Windows.h>
+#include <shellapi.h>
 #include <conio.h>
 #include "header.h" //we can use this to store functions regarding different parts of the program, like the menu, the game, etc. so that we can split the code into multiple files and see (github) what changed in each file
 using namespace std;
@@ -64,9 +65,37 @@ void choice(int choice)
 					system("cls");
 					break;
 				}
+				Sleep(100);
 			}
 			break;
-			case 4:
+		case 4:
+			file.open("credits.txt", ios::in);
+			if (!file.is_open())
+			{
+				cout << "File not found" << endl;
+			}
+			else
+			{
+				string temp;
+				while (getline(file, temp))
+				{
+					cout << temp << endl;
+				}
+				file.close();
+			}
+			ShellExecute(0, 0, L"https://www.youtube.com/watch?v=dQw4w9WgXcQ", 0, 0, SW_SHOW);
+			cout << "Press BACKSPACE to continue" << endl;
+
+			while (1)
+			{
+				if (GetAsyncKeyState(VK_BACK)) {
+					system("cls");
+					break;
+				}
+				Sleep(100);
+			}
+			break;
+			case 5:
 			exitGame = 1;
 			break;
 		default:

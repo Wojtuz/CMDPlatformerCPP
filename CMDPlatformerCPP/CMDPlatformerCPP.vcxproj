@@ -136,6 +136,7 @@
     <ClInclude Include="header.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="credits.txt" />
     <Text Include="howtoplay.txt" />
     <Text Include="Map2.txt" />
   </ItemGroup>

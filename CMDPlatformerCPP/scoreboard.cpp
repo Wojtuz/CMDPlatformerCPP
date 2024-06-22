@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <Windows.h>
 #include "header.h"
+int i = 1;
 using namespace std;
 void openScoreboard() 
 {
@@ -32,7 +33,9 @@ void openScoreboard()
 
 
 	for (const auto& score : scores) {
-		cout << score.second << " " << score.first << endl;
+		cout << "----------------------" << endl; 
+		cout << i << ". " << score.second << " | " << score.first << " points" << endl;
+		i++;
 		
 	}
 	cout << "Press BACKSPACE to return to main menu. " << endl;
@@ -42,7 +45,7 @@ void openScoreboard()
 			//menu(false); //Wywo³ujesz funkcjê menu, ale nic nie robisz ze zwracan¹ wartoœci¹ dlatego nie wywo³uje ¿adnej funkcji z menu
 			break;
 		}	
-		
+		Sleep(100);
 	} 
 	
 }

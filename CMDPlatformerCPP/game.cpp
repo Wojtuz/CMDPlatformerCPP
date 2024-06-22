@@ -29,6 +29,7 @@ public:
 	int posY;
 	int exPosX;
 	int exPosY;
+	int collectedScore = 0;
 	int level = startLVL;
 
 	char sprite = 'O';
@@ -330,6 +331,7 @@ bool makeMap()
 				system("cls");
 				break;
 			}
+			Sleep(100);
 		}
 
 		return false;
@@ -498,11 +500,12 @@ void playGame()
 
 void saveScore()
 {
+
 	fstream file;
 	file.open("scoreboard.txt", ios::out | ios::app);
 	if (file.is_open()) 
 	{
-		file << player.nickname << " " << player.score << endl;
+		file << player.nickname << " " << player.collectedScore << endl;
 		file.close();
 	}
 	else 
@@ -517,12 +520,16 @@ void win()
 	system("cls");
 	displayLevelCleared();
 	cout << "Press BACKSPACE to continue" << endl;
-	saveScore();
+	player.collectedScore += player.score;
+	if (player.level > startLVL) {
+		saveScore();
+	}
 	while (1) {
 		if (GetAsyncKeyState(VK_BACK)) {
 			system("cls");
 			break;
 		}
+		Sleep(100);
 
 	}
 	system("cls");
@@ -542,6 +549,7 @@ void lost()
 	system("cls");
 	displayGameOver();
 	cout << "Lifes ended. Press BACKSPACE to continue" << endl;
+	player.collectedScore += player.score;
 	saveScore();
 	while (1) 
 	{
@@ -549,6 +557,7 @@ void lost()
 			system("cls");
 			break;
 		}
+		Sleep(100);
 	}
 }
 
