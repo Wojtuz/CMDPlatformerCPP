@@ -462,7 +462,7 @@ void playGame()
 			}
 
 			setConsoleColor(0, 15);
-			cout << "Lives: " << shownLife << "                      Score: " << player.score << "                      Level: " << player.life << endl;
+			cout << "Lives: " << shownLife << "                      Score: " << player.score << "                      Level: " << player.level << endl;
 			setConsoleColor(9, 10);
 
 			if (!player.dontMove)
