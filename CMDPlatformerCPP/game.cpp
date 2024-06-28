@@ -453,6 +453,8 @@ void playGame()
 	if(makeMap())
 	{
 		player.setup();
+		
+		
 		while (player.gameOn)
 		{
 			int shownLife = player.life;
